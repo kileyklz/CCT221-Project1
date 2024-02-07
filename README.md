@@ -8,11 +8,11 @@
 #      - Movement, velocity, acceleration.
 #      - Collision detection with walls, paddles, power-ups, bombs, and barriers.
 
-# 3. Smoothing out Paddle Movement:
+# 3. Smoothing out Paddle Movement: Kiley
 #    - Add logic to smooth out paddle movement, ensuring it doesn't jerk abruptly.
 #    - Adjust paddle movement speed or acceleration to achieve smoother motion.
 
-# 4. Sprites for Balls: 
+# 4. Sprites for Balls: Amanda
 #    - Integrate sprite images for the balls.
 #    - Replace basic shape with loaded sprite image for visual enhancement.
 
@@ -21,17 +21,17 @@
 #    - Prevent ball from going off-screen.
 #    - Modify collision detection logic to handle barriers.
 
-# 6. Implementing Power Up (Increase/Decrease Size of Paddle): 
+# 6. Implementing Power Up (Increase/Decrease Size of Paddle): Amanda
 #    - Create PowerUp class inheriting from Turtle.
 #    - Add methods to increase/decrease paddle size upon collision with power-up.
 #    - Modify collision detection logic to trigger size changes.
 
-# 7. Implementing Bomb (Decreases Score): 
+# 7. Implementing Bomb (Decreases Score): Amanda
 #    - Create Bomb class inheriting from Turtle.
 #    - Add methods to decrease score upon collision with bomb.
 #    - Update score display logic to reflect changes caused by collisions.
 
-# 8. Over Time Ball Movement Speed Increase: 
+# 8. Over Time Ball Movement Speed Increase: Kiley
 #    - Define variable to track ball's movement speed.
 #    - Gradually increase ball's speed over time within game loop.
 
