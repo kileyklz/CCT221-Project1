@@ -1,4 +1,7 @@
-# CCT221-Project1
+# CCT221-Project1 
+# soft deadline: sunday, feb 11th @midnight
+# review monday, feb 12th
+# submit tuesday, feb 13th
 # 1. Implement Classes:
 #    - Refactor existing code into classes (e.g., Paddle, Ball, PowerUp, Bomb, Score).
 #    - Define attributes and methods for each class.
