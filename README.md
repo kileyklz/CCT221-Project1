@@ -1,6 +1,6 @@
 # CCT221-Project1
 # 1. Implement Classes:
-#    - Refactor existing code into classes (e.g., Paddle, Ball, PowerUp, Bomb, Barrier, Score).
+#    - Refactor existing code into classes (e.g., Paddle, Ball, PowerUp, Bomb, Score).
 #    - Define attributes and methods for each class.
 
 # 2. Ball Physics: Amanda
