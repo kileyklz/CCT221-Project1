@@ -39,3 +39,5 @@
 #    - Create Score class to manage game's score.
 #    - Add methods to update score based on game events.
 #    - Update score display logic to reflect changes in score.
+
+Need ball class
