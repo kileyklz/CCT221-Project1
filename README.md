@@ -1,7 +1,6 @@
 # CCT221-Project1 
-# soft deadline: sunday, feb 11th @midnight
-# review monday, feb 12th
-# submit tuesday, feb 13th
+# soft deadline: saturday, feb 17th @midnight
+# review and submit: sunday, feb 18
 # 1. Implement Classes:
 #    - Refactor existing code into classes (e.g., Paddle, Ball, PowerUp, Bomb, Score).
 #    - Define attributes and methods for each class.
@@ -11,7 +10,7 @@
 #      - Movement, velocity, acceleration.
 #      - Collision detection with walls, paddles, power-ups, bombs, and barriers.
 
-# 3. Smoothing out Paddle Movement: Kiley
+# 3. Smoothing out Paddle Movement: Kiley DONE
 #    - Add logic to smooth out paddle movement, ensuring it doesn't jerk abruptly.
 #    - Adjust paddle movement speed or acceleration to achieve smoother motion.
 
@@ -34,13 +33,15 @@
 #    - Add methods to decrease score upon collision with bomb.
 #    - Update score display logic to reflect changes caused by collisions.
 
-# 8. Over Time Ball Movement Speed Increase: Kiley
+# 8. Over Time Ball Movement Speed Increase: Kiley 
+#    - add level after someone's score increases
+#    - add some fun text
 #    - Define variable to track ball's movement speed.
 #    - Gradually increase ball's speed over time within game loop.
 
-# 9. Changing Score: Kiley
+# 9. Changing Score: Kiley DONE
 #    - Create Score class to manage game's score.
 #    - Add methods to update score based on game events.
 #    - Update score display logic to reflect changes in score.
 
-Need ball class
+#    Need ball class
