@@ -4,6 +4,7 @@ class Level:
     def __init__(self, max_level):
         self.current_level = 1
         self.max_level = max_level
+        self.initial_ball_speed = 3
         self.level_texts = {
             1: "Level 1",
             2: "Level 2, Faster",
@@ -18,6 +19,7 @@ class Level:
 
     def reset_level(self):
         self.current_level = 1
+        self.ball_speed = 3 
 
     def get_ball_speed(self):
         return self.current_level + 1  

@@ -51,7 +51,7 @@ player2 = Paddle(WIDTH - 20 - PADDLE_WIDTH, HEIGHT // 2 - PADDLE_HEIGHT // 2)
 ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), random.choice([-3, 3]), random.choice([-3, 3]))
 score = Score()
 
-level = Level(5)
+level = Level(6)
 
 while True:
     for event in pygame.event.get():
@@ -87,18 +87,22 @@ while True:
         score.updatePlayer1()
 
     # Check for game over
-    if score.score_player1 >= 5 or score.score_player2 >= 5:
-        if score.score_player1 >= 5:
+    if level.current_level > 5:
+        if score.score_player1 > score.score_player2:
             winner = "Player 1"
-        else:
+        elif score.score_player1 < score.score_player2:
             winner = "Player 2"
+        else:
+            winner = "It's a tie"
+        
         print(f"Game Over! {winner} wins!")
         score.score_player1 = 0
         score.score_player2 = 0
-        level.reset_level()  
+        level.reset_level()
+        ball.vx, ball.vy = level.get_ball_speed(), level.get_ball_speed()
 
     screen.fill(BLACK)
-    
+
     font = pygame.font.Font(None, 36)
     level_text = font.render(level.get_level_text(), True, WHITE)
     screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 10))
