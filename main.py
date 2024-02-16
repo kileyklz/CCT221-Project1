@@ -1,135 +1,118 @@
-import turtle
+import pygame
+import sys
+import random
+from score import Score
 
-window = turtle.Screen()
-window.title('Ping-Pong')
-window.setup(850, 650)
-window.bgcolor('green')
-window.tracer(1)
+# Initialize Pygame
+pygame.init()
 
-#left paddle starts here
-leftPaddle = turtle.Turtle()
-leftPaddle.penup()
-leftPaddle.goto(-425, 0)
-leftPaddle.pendown()
-leftPaddle.speed(0)
-leftPaddle.shape('square')
-leftPaddle.shapesize(6, 2)
-leftPaddle.color('white')
-leftPaddle.penup()
+# Constants
+WIDTH, HEIGHT = 800, 600
+PADDLE_SPEED = 7
+PADDLE_WIDTH, PADDLE_HEIGHT = 10, 100
+BALL_SIZE = 15
+MAX_LEVEL = 5
 
-#right paddle starts here
-rightPaddle = turtle.Turtle()
-rightPaddle.penup()
-rightPaddle.goto(425, 0)
-rightPaddle.pendown()
-rightPaddle.speed(0)
-rightPaddle.shape('square')
-rightPaddle.shapesize(6, 2)
-rightPaddle.color('white')
-rightPaddle.penup()
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
-#ball starts here
-ball = turtle.Turtle()
-ball.penup()
-ball.goto(0, 0)
-ball.dx = 5
-ball.dy = -5
-ball.pendown()
-ball.speed(45)
-ball.shape('circle')
-ball.color('red')
-ball.penup()
+# Create the screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Ping Pong")
 
-leftPlayerPoints = 0
-rightPlayerPoints = 0
+# Clock for controlling the frame rate
+clock = pygame.time.Clock()
 
-score = turtle.Turtle()
-score.color('blue')
-score.penup()
-score.goto(0, 250)
-score.write('Left Player : 0  Right Player: 0',
-            align="center",
-            font=("Courier", 24, "normal"))
-score.hideturtle()
+# Class for paddles
+class Paddle(pygame.Rect):
+    def __init__(self, x, y):
+        super().__init__(x, y, PADDLE_WIDTH, PADDLE_HEIGHT)
 
+    def move(self, dy):
+        self.y += dy
+        if self.top < 0:
+            self.top = 0
+        if self.bottom > HEIGHT:
+            self.bottom = HEIGHT
 
-def paddle_L_up():
-  # W key pressed
-  y = leftPaddle.ycor()
-  y = y + 20
-  leftPaddle.sety(y)
+# Class for the ball
+class Ball(pygame.Rect):
+    def __init__(self, x, y, vx, vy):
+        super().__init__(x, y, BALL_SIZE, BALL_SIZE)
+        self.vx, self.vy = vx, vy
 
+    def move(self):
+        self.x += self.vx
+        self.y += self.vy
 
-def paddle_L_down():
-  # S key pressed
-  y = leftPaddle.ycor()
-  y = y - 20
-  leftPaddle.sety(y)
+    def check_collision(self):
+        if self.top <= 0 or self.bottom >= HEIGHT:
+            self.vy = -self.vy
 
+        if pygame.Rect.colliderect(self, player1) or pygame.Rect.colliderect(self, player2):
+            self.vx = -self.vx
 
-def paddle_R_up():
-  # up arrow pressed
-  y = rightPaddle.ycor()
-  y = y + 20  # y+= 20
-  rightPaddle.sety(y)
+# Initialize paddles and ball
+player1 = Paddle(20, HEIGHT // 2 - PADDLE_HEIGHT // 2)
+player2 = Paddle(WIDTH - 20 - PADDLE_WIDTH, HEIGHT // 2 - PADDLE_HEIGHT // 2)
+ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), random.choice([-3, 3]), random.choice([-3, 3]))
+score = Score()
 
+# Game variables
+level = 1
 
-def paddle_R_down():
-  # down arrow pressed
-  y = rightPaddle.ycor()
-  y = y - 20  # y -= 20
-  rightPaddle.sety(y)
-
-
-window.listen()
-window.onkeypress(paddle_L_up, "w")
-window.onkeypress(paddle_L_down, "s")
-window.onkeypress(paddle_R_up, "Up")
-window.onkeypress(paddle_R_down, "Down")
-
+# Main game loop
 while True:
-  window.update()
-  ball.setx(ball.xcor() + ball.dx)
-  ball.sety(ball.ycor() + ball.dy)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-  # bounce off all edges
-  if ball.ycor() > 250:
-    ball.sety(250)
-    ball.dy = ball.dy * -1  # ball.dy *= -1
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        player1.move(-PADDLE_SPEED)
+    if keys[pygame.K_s]:
+        player1.move(PADDLE_SPEED)
+    if keys[pygame.K_UP]:
+        player2.move(-PADDLE_SPEED)
+    if keys[pygame.K_DOWN]:
+        player2.move(PADDLE_SPEED)
 
-  if ball.ycor() < -250:
-    ball.sety(-250)
-    ball.dy = ball.dy * -1  # ball.dy *= -1
+    # Move the ball
+    ball.move()
+    ball.check_collision()
 
-  if ball.xcor() > 425:
-    ball.goto(0, 0)
-    leftPlayerPoints += 1  # leftPlayerPoints = leftPlayerPoints + 1
-    ball.dy *= -1
-    score.clear()
-    score.write('Left Player : {} Right Player: {}'.format(
-        leftPlayerPoints, rightPlayerPoints),
-                align="center",
-                font=("Courier", 24, "normal"))
+    # Check for scoring
+    if ball.left <= 0 or ball.right >= WIDTH:
+        ball.vx = -ball.vx
 
-  if ball.xcor() < -425:
-    ball.goto(0, 0)
-    rightPlayerPoints += 1
-    ball.dy *= -1
-    score.clear()
-    score.write('Left Player : {} Right Player: {}'.format(
-        leftPlayerPoints, rightPlayerPoints),
-                align="center",
-                font=("Courier", 24, "normal"))
+    # Check if the ball goes out of bounds
+    if ball.left <= 0:
+        level += 1
+        if level > MAX_LEVEL:
+            level = MAX_LEVEL
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), level, level)  # Increase ball speed
+        score.updatePlayer2()  # Update the score of Player 2 after resetting the ball
+    elif ball.right >= WIDTH:
+        level += 1
+        if level > MAX_LEVEL:
+            level = MAX_LEVEL
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), -level, level)  # Increase ball speed
+        score.updatePlayer1()
 
-  # collision of ball and paddles
-  if (ball.xcor() > 385
-      and ball.xcor() < 395) and (ball.ycor() < rightPaddle.ycor() + 40
-                                  and ball.ycor() > rightPaddle.ycor() - 40):
-    ball.setx(385)
-    ball.dx *= -1
+    # Check for game over
+    if score.score_player1 >= 5 or score.score_player2 >= 5:
+        winner = "Player 1" if score.score_player1 >= 5 else "Player 2"
+        print(f"Game Over! {winner} wins!")
+        score.score_player1 = 0
+        score.score_player2 = 0
 
-  if (ball.xcor() > -395
-      and ball.xcor() < -385) and (ball.ycor() < leftPaddle.ycor() + 40
-                                   and ball.ycor() > leftPaddle.ycor() - 40):
-    ball.setx(-385)
-    ball.dx *= -1
+    screen.fill(BLACK)
+    pygame.draw.rect(screen, (255, 255, 255), player1)
+    pygame.draw.rect(screen, (255, 255, 255), player2)
+    pygame.draw.ellipse(screen, (255, 255, 255), ball)
+    score.draw(screen, WIDTH, HEIGHT)
+
+    pygame.display.flip()
+    clock.tick(60)
