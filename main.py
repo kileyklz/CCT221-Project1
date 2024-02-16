@@ -3,28 +3,22 @@ import sys
 import random
 from score import Score
 
-# Initialize Pygame
 pygame.init()
 
-# Constants
 WIDTH, HEIGHT = 800, 600
 PADDLE_SPEED = 7
 PADDLE_WIDTH, PADDLE_HEIGHT = 10, 100
 BALL_SIZE = 15
 MAX_LEVEL = 5
 
-# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-# Create the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ping Pong")
 
-# Clock for controlling the frame rate
 clock = pygame.time.Clock()
 
-# Class for paddles
 class Paddle(pygame.Rect):
     def __init__(self, x, y):
         super().__init__(x, y, PADDLE_WIDTH, PADDLE_HEIGHT)
@@ -36,7 +30,6 @@ class Paddle(pygame.Rect):
         if self.bottom > HEIGHT:
             self.bottom = HEIGHT
 
-# Class for the ball
 class Ball(pygame.Rect):
     def __init__(self, x, y, vx, vy):
         super().__init__(x, y, BALL_SIZE, BALL_SIZE)
@@ -53,16 +46,13 @@ class Ball(pygame.Rect):
         if pygame.Rect.colliderect(self, player1) or pygame.Rect.colliderect(self, player2):
             self.vx = -self.vx
 
-# Initialize paddles and ball
 player1 = Paddle(20, HEIGHT // 2 - PADDLE_HEIGHT // 2)
 player2 = Paddle(WIDTH - 20 - PADDLE_WIDTH, HEIGHT // 2 - PADDLE_HEIGHT // 2)
 ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), random.choice([-3, 3]), random.choice([-3, 3]))
 score = Score()
 
-# Game variables
 level = 1
 
-# Main game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -79,7 +69,6 @@ while True:
     if keys[pygame.K_DOWN]:
         player2.move(PADDLE_SPEED)
 
-    # Move the ball
     ball.move()
     ball.check_collision()
 
@@ -92,13 +81,13 @@ while True:
         level += 1
         if level > MAX_LEVEL:
             level = MAX_LEVEL
-        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), level, level)  # Increase ball speed
-        score.updatePlayer2()  # Update the score of Player 2 after resetting the ball
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), level, level)  
+        score.updatePlayer2() 
     elif ball.right >= WIDTH:
         level += 1
         if level > MAX_LEVEL:
             level = MAX_LEVEL
-        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), -level, level)  # Increase ball speed
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), -level, level)  
         score.updatePlayer1()
 
     # Check for game over

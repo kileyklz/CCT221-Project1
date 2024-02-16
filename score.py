@@ -1,6 +1,5 @@
 import pygame
 
-# Colors
 WHITE = (255, 255, 255)
 
 class Score:
