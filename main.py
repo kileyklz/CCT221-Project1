@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 from score import Score
+from levels import Level
 
 pygame.init()
 
@@ -9,7 +10,6 @@ WIDTH, HEIGHT = 800, 600
 PADDLE_SPEED = 7
 PADDLE_WIDTH, PADDLE_HEIGHT = 10, 100
 BALL_SIZE = 15
-MAX_LEVEL = 5
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -51,7 +51,7 @@ player2 = Paddle(WIDTH - 20 - PADDLE_WIDTH, HEIGHT // 2 - PADDLE_HEIGHT // 2)
 ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), random.choice([-3, 3]), random.choice([-3, 3]))
 score = Score()
 
-level = 1
+level = Level(5)
 
 while True:
     for event in pygame.event.get():
@@ -78,26 +78,32 @@ while True:
 
     # Check if the ball goes out of bounds
     if ball.left <= 0:
-        level += 1
-        if level > MAX_LEVEL:
-            level = MAX_LEVEL
-        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), level, level)  
+        level.increase_level() 
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), level.get_ball_speed(), level.get_ball_speed())  
         score.updatePlayer2() 
     elif ball.right >= WIDTH:
-        level += 1
-        if level > MAX_LEVEL:
-            level = MAX_LEVEL
-        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), -level, level)  
+        level.increase_level()  
+        ball = Ball(random.randint(100, WIDTH - 100), random.randint(100, HEIGHT - 100), -level.get_ball_speed(), level.get_ball_speed())  
         score.updatePlayer1()
 
     # Check for game over
     if score.score_player1 >= 5 or score.score_player2 >= 5:
-        winner = "Player 1" if score.score_player1 >= 5 else "Player 2"
+        if score.score_player1 >= 5:
+            winner = "Player 1"
+        else:
+            winner = "Player 2"
         print(f"Game Over! {winner} wins!")
         score.score_player1 = 0
         score.score_player2 = 0
+        level.reset_level()  
 
     screen.fill(BLACK)
+    
+    font = pygame.font.Font(None, 36)
+    level_text = font.render(level.get_level_text(), True, WHITE)
+    screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 10))
+
+
     pygame.draw.rect(screen, (255, 255, 255), player1)
     pygame.draw.rect(screen, (255, 255, 255), player2)
     pygame.draw.ellipse(screen, (255, 255, 255), ball)
